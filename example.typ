@@ -5,19 +5,15 @@
     title: "An Interesting Thesis Title",
     author: (
       name: "Jan Novák",
-      email: "someone@fel.cvut.cz",
-      url: "https://my.project/url",
     ),
-    submission-date: datetime(year: 2012, month: 1, day: 21),
+    // submission-date: datetime(year: 2012, month: 1, day: 21),
+    submission-date: datetime.today(),
 
     // true for bachelor's thesis, false for master's thesis
     bachelor: false,
+    faculty: "Information Technology",
+    department: "Lollygagging",
     supervisor: "Ing. Jan Novák, PhD.",
-
-    faculty: "Faculty of Electrical Engineering",
-    department: "Department of Measurement",
-    study-programme: "Open Informatics",
-    branch-of-study: "Computer Engineering", // studijni obor
   ),
 
   // set to true if generating a PDF for print (shifts page layout, turns code blocks greyscale, correctly aligns odd/even pages,...)
@@ -39,6 +35,12 @@
     #lorem(30)
     
     #lorem(30)
+  ],
+    keywords-en: [
+    #lorem(10)
+  ],
+  keywords-cz: [
+    #lorem(10)
   ],
 )
 

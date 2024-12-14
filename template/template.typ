@@ -9,7 +9,7 @@
 
 #import "./front.typ": *
 
-#let template(meta: (), print: false, ..intro-args, body) = {
+#let template(meta: (), print: false, acknowledgement: "", declaration: "", abstract-en:"", abstract-cz:"", keywords-en:"", keywords-cz:"", ..intro-args, body) = {
   set document(
     author: meta.author.name,
     title: meta.title, date:
@@ -30,8 +30,85 @@
     margin: margin,
   )
 
+  set page(numbering: "i")
+
+  // before title page goes the two sided assignment page
+    page[Replace this page with Assignment]
+    if print {
+      page[]
+    }
+
   // render title page before configuring the rest, which we don't use
   title-page(print, ..meta)
+
+  imprint-page(print, ..meta)
+
+  outline(depth: 2)
+  pagebreak()
+  // [ = List of Figures]
+  outline(title: "List of Figures", target: figure.where(kind: image))
+  // [ = List of Tables]
+  outline(title: "List of Tables", target: figure.where(kind: table))
+  // [ = List of Code Listings]
+  outline(title: "List of Code Listings", target: figure.where(kind: raw))
+  pagebreak()
+
+  {
+    hide[
+      = Acknowledgements
+    ]
+    set par(justify: true)
+    set text(weight: "extralight", style: "italic")
+    v(1fr)
+    block(width: 60%, acknowledgement)
+    v(2fr)
+  }
+  pagebreak()
+
+  {
+    set par(justify: true)
+
+    v(1fr)
+    [
+      #set align(right)
+       = Declaration]
+      declaration
+      v(1.5em)
+
+      [In Prague on ] 
+      meta.submission-date.display("[day]. [month]. [year]") 
+      h(1fr)
+      box(width: 1fr, repeat[.])
+  }
+
+  pagebreak()
+
+  {
+    v(28mm)
+    [ = Abstract]
+    abstract-en
+    v(1em)
+    [
+      #set text(weight: "bold")
+      Keywords: 
+      ]
+    h(1em)
+    keywords-en
+
+    v(28mm)
+    [ = Abstrakt]
+    abstract-cz
+    v(1em)
+    [
+      #set text(weight: "bold")
+      Klíčová slova: 
+      ]
+    h(1em)
+    keywords-cz
+    
+  }
+
+
   
   set par(justify: true)
 
@@ -87,7 +164,7 @@
     let use-supplement = it.outlined and it.numbering != none
     if (use-supplement) {
       text(size: 13pt, fill: rgb(120, 120, 120))[
-        #it.supplement #counter(heading).display(it.numbering)
+        Chapter #counter(heading).display(it.numbering)
       ]
       linebreak()
       v(-16pt)
@@ -121,8 +198,7 @@
     columns(2, it)
   }
 
-  
-  introduction(print, meta.submission-date, ..intro-args)
+  pagebreak(weak: true)
 
   // start numbering from the first page of actual text
   set page(numbering: "1")

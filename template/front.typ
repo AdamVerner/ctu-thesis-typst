@@ -8,69 +8,113 @@
   ),
   submission-date: datetime.today(),
   bachelor: false,
-  supervisor: "",
   faculty: "",
   department: "",
-  study-programme: "",
-  branch-of-study: "",
+  supervisor: "",
 ) = {
   // render as a separate page
-  // inner margin is 8mm due to binding loss, but without
-  //  the bent page extra, which is not an issue for the title page
-  let inside-margin = if print {8mm} else {0mm}
-  show: page.with(margin: (top: 0mm, bottom: 0mm, inside: inside-margin, outside: 0mm))
+  // margins taken from "new" fit-ctu template
 
-  set align(center)
-  set place(center)
+  show: page.with(margin: (top: 80mm, bottom: 40mm, left: 67mm, right: 40mm))
+
+  set align(left)
+  set place(left)
   set text(font: "Technika", weight: "extralight", size: 10.3pt, fallback: false)
-
-  // shorthand to vertically position elements
-  let b(dy, content, size: none, weight: none) = {
-    set text(size: size) if size != none
-    set text(weight: weight) if weight != none
-    place(dy: dy, text(content))
-  }
-
-  b(33mm)[
-    Czech Technical University in Prague \
-    #faculty \
-    #department
-  ]
-
-  b(63.5mm)[
-    #image("./res/symbol_cvut_konturova_verze_cb.svg")
-  ]
-
-  b(131.5mm, size: 12.5pt)[
-    #if bachelor [
+ 
+  {
+  if bachelor [
       Bachelor's Thesis
     ] else [
       Master's Thesis
     ]
-  ]
+  }
 
-  b(140.7mm, size: 14.8pt, weight: "regular")[
-    #title
-  ]
+  v(25mm)
   
-  b(154.25mm, [
-    #text(size: 12.5pt, style: "italic")[#author.name] \
+  {
 
-    \
-    #author.email \
-    #link(author.url)
-  ])
+  set text(size: 25pt, weight: "regular")
+  [
+    #upper(title)
+  ]
+  }
 
-  b(210mm)[Supervisor: #supervisor]
+  v(1fr)
+{
+  set text(size: 12.5pt, weight: "regular")
+  [
+    #author.name
+  ]
+}
 
-  b(235.2mm)[Study programme: #study-programme]
-  b(241.2mm)[Branch of study: #branch-of-study]
-  
-  b(254.3mm)[#submission-date.display("[month repr:long] [year]")]
+  v(1fr)
+  {
+    // set text(size: 10pt, weight: "regular")
+    [
+      Faculty of #faculty\
+      Department of #department\
+      Supervisor: #supervisor\
+      #submission-date.display("[month repr:long] [year]")
+      ]
+  }
+}
+
+#let imprint-page(
+  print,
+  title: "",
+  author: (
+    name: "",
+    email: "",
+    url: "",
+  ),
+  submission-date: datetime.today(),
+  bachelor: false,
+  faculty: "",
+  department: "",
+  supervisor: "",
+) = {
+  show: page.with(margin: (bottom: 40mm, top:46mm, left:39.5mm, right:40mm))
+  //  show: page.with(margin: (bottom: 40mm, top:46mm, inside:47mm, outside:32.5mm))
+
+  set text(weight: "extralight")
+  set par(justify:true)
+  set align(bottom)
+
+  [
+    Czech Technical University in Prague\
+    Faculty of #faculty\
+    #sym.copyright
+    #submission-date.display("[year]")
+    #author.name. All rights reserved. \
+    #[
+      #set text(style: "italic")
+          This thesis is school work as defined by Copyright Act of the Czech Republic. It has been
+submitted at Czech Technical University in Prague, Faculty of Information Technology. The
+thesis is protected by the Copyright Act and its usage without author’s permission is prohibited
+(with exceptions defined by the Copyright Act).
+    ]
+
+  #v(1em)
+  Citation of this thesis: 
+  #author.name.
+  #{
+    set text(style:"italic")
+    title
+  }.
+  #if bachelor [
+      Bachelor's Thesis.
+    ] else [
+      Master's Thesis.
+    ]
+  Czech Techincal University in Prague, 
+  Faculty of #faculty, 
+  #submission-date.display("[year]").
+  ]
 }
 
 
 #let abstract-page(
+  print,
   submission-date,
   abstract-en: [],
   abstract-cz: [],
@@ -80,7 +124,20 @@
   ]
 ) = {
   // render as a separate page; add room at the bottom for TODOs and notes
-  show: page.with(margin: (bottom: 0mm))
+  // \if@twoside
+  //   \RequirePackage[top=4.6cm,bottom=4cm,footskip=4em,inner=4.7cm,outer=3.25cm]{geometry}[2020/01/02] %page layout
+  // \else
+  //   \RequirePackage[left=3.95cm,right=4.0cm,top=4.6cm,bottom=4cm,footskip=4em]{geometry}[2020/01/02] %page layout
+  // \fi
+
+  //
+  //
+  if print {
+    show: page.with(margin: (bottom: 40mm, top:46mm, inside:47mm, outside:32.5mm))
+  }
+  else {
+    show: page.with(margin: (bottom: 40mm, top:46mm, left:39.5mm, right:40mm))
+  }
   
   set heading(outlined: false, bookmarked: false)
   // pretty hacky way to disable the implicit linebreak in my heading style
@@ -143,30 +200,4 @@
       }
     )
   }
-}
-
-
-#let introduction(print, ..args) = {
-  // hide empty pages from web version
-  if print {
-    // assignment must be on a single sheet from both sides
-    pagebreak(to: "odd")
-  } else {
-    // Typst cannot embed PDFs, add the assignment separately
-    page[assignment page 1]
-    page[assignment page 2]
-  }
-
-  if print {
-    pagebreak(to: "odd", weak: true)
-  }
-  abstract-page(..args)
-
-  if print {
-    // outline should be on the right, but the outline title has a pagebreak
-    pagebreak(to: "even")
-  }
-  outline(depth: 2)
-
-  pagebreak(weak: true)
 }
