@@ -154,6 +154,15 @@
       </group>
     </group>
   </macro>
+  <macro name="isbn">
+    <choose>
+      <if type="book">
+        <group prefix="ISBN " delimiter=": ">
+          <text variable="ISBN"/>
+        </group>
+      </if>
+    </choose>
+  </macro>
   <macro name="title">
     <choose>
       <if type="bill book graphic legal_case legislation motion_picture song standard software" match="any">
@@ -478,6 +487,7 @@
             <text macro="publisher"/>
             <text macro="issued"/>
             <text macro="page"/>
+            <text macro='isbn'/>
           </group>
           <text macro="access"/>
         </else-if>
