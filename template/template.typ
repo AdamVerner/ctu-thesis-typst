@@ -189,7 +189,7 @@
   //  consistent indexing
   //set cite(style: "chicago-notes")
   
-  set bibliography(style: "ieee", title: none)
+  set bibliography(style: "res/IEEE-modified.csl", title: none)
   show bibliography: it => {
     heading("Bibliography")
 
