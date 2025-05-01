@@ -8,7 +8,6 @@
 
 
 #import "./front.typ": *
-#import "@preview/muchpdf:0.1.0": muchpdf
 
 #let template(meta: (), print: false, acknowledgement: "", declaration: "", abstract-en:"", abstract-cz:"", keywords-en:"", keywords-cz:"", assignment: "", ..intro-args, body) = {
   set document(
@@ -37,7 +36,7 @@
   )
 
   
-  set page(numbering: "i")
+  set page(numbering: none)
 
   if assignment.len() == 0 {
     // before title page goes the two sided assignment page
@@ -48,6 +47,7 @@
   }
   else {
     set page(margin: 0mm)
+    import "@preview/muchpdf:0.1.0": muchpdf
     muchpdf(assignment)
   }
   // render title page before configuring the rest, which we don't use
@@ -55,7 +55,7 @@
 
   imprint-page(print, ..meta)
 
-  outline(depth: 2)
+  outline(depth: 2, indent: auto)
   pagebreak()
   // [ = List of Figures]
   outline(title: "List of Figures", target: figure.where(kind: image))
@@ -63,7 +63,10 @@
   outline(title: "List of Tables", target: figure.where(kind: table))
   // [ = List of Code Listings]
   outline(title: "List of Code Listings", target: figure.where(kind: raw))
+  
   pagebreak()
+
+  set page(numbering: "i")
 
   {
     hide[
@@ -123,6 +126,7 @@
 
   
   set par(justify: true)
+  set par(first-line-indent: 1.5em)
 
   set line(length: 100%, stroke: 1pt + luma(200))
   
@@ -149,7 +153,7 @@
   }
 
   import "@preview/outrageous:0.3.0"
-  set outline(indent: true)
+  set outline(indent: 1em)
   show outline.entry: outrageous.show-entry.with(
     font: (none, none),
     // very hacky way to format appendices differently
@@ -182,7 +186,8 @@
       v(-16pt)
     }
     
-    text(size: 22pt, weight: "medium")[
+    set align(end)
+    text(size: 24pt, weight: "bold", font: "PT Sans")[
       #it.body
     ]
 
@@ -194,7 +199,14 @@
   }
 
   show heading.where(level: 2): it => {
-    block(it, below: 11pt)
+    set text(size: 18pt, weight: "bold")
+    // TODO: check what the actual spacing should be
+    block(it, below: 18pt, above: 32pt)
+  }
+
+  show heading.where(level: 3): it => {
+    set text(size: 16pt, weight: "bold")
+    block(it, below: 16pt, above: 22pt)
   }
 
   // TODO: probably find a style that has footnotes, but also a usable
