@@ -8,8 +8,9 @@
 
 
 #import "./front.typ": *
+#import "@preview/muchpdf:0.1.0": muchpdf
 
-#let template(meta: (), print: false, acknowledgement: "", declaration: "", abstract-en:"", abstract-cz:"", keywords-en:"", keywords-cz:"", ..intro-args, body) = {
+#let template(meta: (), print: false, acknowledgement: "", declaration: "", abstract-en:"", abstract-cz:"", keywords-en:"", keywords-cz:"", assignment: "", ..intro-args, body) = {
   set document(
     author: meta.author.name,
     title: meta.title, date:
@@ -24,20 +25,31 @@
   let text-width = 140mm
   let margin = (a4-width - text-width) / 2
 
+
+  {
+    
+  }
+
   set page(
     paper: "a4",
     // same top/bottom margin as inner/outer; looks good in the PDF version
     margin: margin,
   )
 
+  
   set page(numbering: "i")
 
-  // before title page goes the two sided assignment page
+  if assignment.len() == 0 {
+    // before title page goes the two sided assignment page
     page[Replace this page with Assignment]
     if print {
       page[]
     }
-
+  }
+  else {
+    set page(margin: 0mm)
+    muchpdf(assignment)
+  }
   // render title page before configuring the rest, which we don't use
   title-page(print, ..meta)
 

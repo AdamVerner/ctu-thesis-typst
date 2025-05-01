@@ -42,6 +42,7 @@
   keywords-cz: [
     #lorem(10)
   ],
+  assignment: read("assignment.pdf", encoding: none)
 )
 
 = Introduction
