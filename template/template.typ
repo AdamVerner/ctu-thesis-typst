@@ -25,18 +25,12 @@
   let margin = (a4-width - text-width) / 2
 
 
-  {
-    
-  }
-
   set page(
     paper: "a4",
     // same top/bottom margin as inner/outer; looks good in the PDF version
     margin: margin,
   )
 
-  
-  set page(numbering: none)
 
   if assignment.len() == 0 {
     // before title page goes the two sided assignment page
@@ -50,28 +44,15 @@
     import "@preview/muchpdf:0.1.0": muchpdf
     muchpdf(assignment)
   }
+
   // render title page before configuring the rest, which we don't use
   title-page(print, ..meta)
 
-  imprint-page(print, ..meta)
-
-  outline(depth: 2, indent: auto)
-  pagebreak()
-  // [ = List of Figures]
-  outline(title: "List of Figures", target: figure.where(kind: image))
-  // [ = List of Tables]
-  outline(title: "List of Tables", target: figure.where(kind: table))
-  // [ = List of Code Listings]
-  outline(title: "List of Code Listings", target: figure.where(kind: raw))
-  
   pagebreak()
 
-  set page(numbering: "i")
 
   {
-    hide[
-      = Acknowledgements
-    ]
+    hide[= Acknowledgements]
     set par(justify: true)
     set text(weight: "extralight", style: "italic")
     v(1fr)
@@ -98,6 +79,13 @@
 
   pagebreak()
 
+  imprint-page(print, ..meta)
+
+
+  pagebreak()
+
+  set page(numbering: "i")
+
   {
     v(28mm)
     [ = Abstract]
@@ -122,7 +110,16 @@
     keywords-cz
     
   }
+  pagebreak()
 
+  outline(depth: 2, indent: auto)
+  pagebreak()
+  // [ = List of Figures]
+  outline(title: "List of Figures", target: figure.where(kind: image))
+  // [ = List of Tables]
+  outline(title: "List of Tables", target: figure.where(kind: table))
+  // [ = List of Code Listings]
+  outline(title: "List of Code Listings", target: figure.where(kind: raw))
 
   
   set par(justify: true)

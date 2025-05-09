@@ -15,12 +15,18 @@
   // render as a separate page
   // margins taken from "new" fit-ctu template
 
-  show: page.with(margin: (top: 80mm, bottom: 40mm, left: 67mm, right: 40mm))
+  show: page.with(margin: (top: 40mm, bottom: 40mm, left: 50mm, right: 35mm))
+
+  image("res/logo-fit-cs-cerna.png", width: 150pt)
+  v(25mm)
 
   set align(left)
   set place(left)
   set text(font: "Technika", weight: "extralight", size: 10.3pt, fallback: false)
  
+
+  // faculty logo
+
   {
   if bachelor [
       Bachelor's Thesis
@@ -29,7 +35,7 @@
     ]
   }
 
-  v(25mm)
+  v(10mm)
   
   {
 
@@ -39,7 +45,7 @@
   ]
   }
 
-  v(1fr)
+  v(5mm)
 {
   set text(size: 12.5pt, weight: "regular")
   [
@@ -47,14 +53,15 @@
   ]
 }
 
-  v(1fr)
+  v(3fr)
   {
     // set text(size: 10pt, weight: "regular")
     [
       Faculty of #faculty\
       Department of #department\
       Supervisor: #supervisor\
-      #submission-date.display("[month repr:long] [year]")
+      \
+      #submission-date.display("[day padding:none] [month repr:long] [year]")
       ]
   }
 }
