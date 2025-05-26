@@ -35,9 +35,6 @@
   if assignment.len() == 0 {
     // before title page goes the two sided assignment page
     page[Replace this page with Assignment]
-    if print {
-      page[]
-    }
   }
   else {
     set page(margin: 0mm)
@@ -45,11 +42,18 @@
     muchpdf(assignment)
   }
 
+  if print {
+    page[]
+  }
+
   // render title page before configuring the rest, which we don't use
   title-page(print, ..meta)
 
   pagebreak()
-
+  
+  if print {
+    page[]
+  }
 
   {
     hide[= Acknowledgements]
@@ -58,6 +62,11 @@
     v(1fr)
     block(width: 60%, acknowledgement)
     v(2fr)
+    
+    if print {
+    page[]
+  }
+
   }
   pagebreak()
 
@@ -98,6 +107,9 @@
     h(1em)
     keywords-en
 
+  if print {
+    pagebreak()
+  }
     v(28mm)
     [ = Abstrakt]
     abstract-cz
